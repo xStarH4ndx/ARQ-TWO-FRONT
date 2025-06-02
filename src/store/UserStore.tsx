@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-// import { client } from '../api/client';
+import { client } from '../api/client';
 
 type userData = {
   id: string;

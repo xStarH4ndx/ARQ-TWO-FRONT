@@ -4,6 +4,7 @@ import {RouterLayout} from "./components/common/RouterLayout";
 // import {LoginPage} from "./pages/auth/loginPage";
 
 import HomePage from "./pages/homepage";
+import LoginPage from "./pages/loginPage";
 //ADMINISTRADOR------------------------
 // import AdminPage from "./pages/admin/adminPage";
 // import AdminDashboard from "./pages/admin/adminDashboard";
@@ -19,7 +20,7 @@ export const AppRouter: React.FC = () => {
     <Routes>
       <Route path="/" element={<Navigate to="/login"/>}/>
       {/* Rutas sin el navbar */}
-      {/* <Route path="/login" element={<LoginPage/>}/> */}
+      <Route path="/login" element={<LoginPage/>}/>
       <Route path="/" element={<RouterLayout/>}>
         <Route path="/homepage" element={<HomePage/>} />
         {/* Rutas ADMIN */}
