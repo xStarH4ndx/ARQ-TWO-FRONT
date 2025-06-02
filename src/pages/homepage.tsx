@@ -1,5 +1,6 @@
 import { Typography, Paper } from '@mui/material';
 import React from 'react';
+import ChatIA from '../components/ChatIA';
 
 const HomePage: React.FC = () => {
   return (
@@ -10,6 +11,9 @@ const HomePage: React.FC = () => {
         <Typography variant="body1" gutterBottom color="black">
             Bienvenido a la página de inicio de nuestra aplicación. Aquí puedes encontrar información relevante y enlaces a otras secciones.
         </Typography>
+        <Paper sx={{p :2}}>
+          <ChatIA />
+        </Paper>
     </Paper>
   );
 }
