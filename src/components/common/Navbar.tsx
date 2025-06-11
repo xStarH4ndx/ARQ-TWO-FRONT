@@ -1,26 +1,21 @@
 import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-// import { useUserStore } from '../../store/UserStore';
+import { useUserStore } from '../../store/UserStore';
 
 const Navbar = () => {
   const navigate = useNavigate();
 //   const email= useUserStore((state) => state.getEmail());
 //   const role = useUserStore((state) => state.getRole());
-  const role = 'admin';
   
   // Opciones según el rol
-  const menuOptions = role === 'teacher' ? [
+  const menuOptions = [
     { label: 'Mis Solicitudes', path: '/teacher-solicitudes' },
     { label: 'Crear Solicitud', path: '/teacher-crearSolicitud' },
     { label: 'Mi Cuenta', path: '/teacher' }
-  ] : role === 'admin' ? [
-    { label: 'Solicitudes', path: '/admin-solicitudes' },
-    { label: 'Historial', path: '/admin-historial' },
-    { label: 'Dashboard', path: '/admin-dashboard'}
-  ] : [];
-
+  ]
+  
   const handleLogout = () => {
-    // useUserStore.getState().logout();
+    useUserStore.getState().logout();
     navigate('/login');
   };
 
