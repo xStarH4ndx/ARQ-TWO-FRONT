@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLazyQuery } from '@apollo/client';
 import {
   Box,
@@ -8,97 +8,159 @@ import {
   CardActions,
   CircularProgress,
   Grid,
-  TextField,
   Typography,
-  Stack,
 } from '@mui/material';
-import { LISTAR_INVENTARIO } from '../../api/queries/inventoryQueries';
-import { Inventario } from '../../types/types';
+import { LISTAR_INVENTARIO, OBTENER_PRODUCTO } from '../../api/queries/inventoryQueries';
+import { Inventario, Producto } from '../../types/types';
+import ActualizarCantidadModal from './actualizarCantidadModal';
 
 interface InventarioListProps {
+  casaId: string;
   onItemSeleccionado?: (item: Inventario) => void;
 }
 
-const InventarioList: React.FC<InventarioListProps> = ({ onItemSeleccionado }) => {
-  const [casaId, setCasaId] = useState('');
-  const [listarInventario, { loading, data, error }] = useLazyQuery<{ listarInventario: Inventario[] }>(LISTAR_INVENTARIO);
+const getBorderColor = (categoria: string) => {
+  switch (categoria.toLowerCase()) {
+    case 'alimentos':
+      return 'green';
+    case 'limpieza':
+      return 'skyblue';
+    case 'otros':
+      return 'gold';
+    default:
+      return 'gray';
+  }
+};
 
-  const handleBuscarInventario = () => {
+const InventarioList: React.FC<InventarioListProps> = ({ casaId, onItemSeleccionado }) => {
+  const [listarInventario, { loading, data, error, refetch }] =
+    useLazyQuery<{ listarInventario: Inventario[] }>(LISTAR_INVENTARIO);
+
+  const [obtenerProducto] = useLazyQuery<{ obtenerProducto: Producto }>(OBTENER_PRODUCTO, {
+    fetchPolicy: 'network-only',
+    onCompleted: (data) => {
+      const prod = data.obtenerProducto;
+      setDetallesProductos((prev) => ({
+        ...prev,
+        [prod.id]: {
+          descripcion: prod.descripcion || '',
+          categoria: prod.categoria,
+        },
+      }));
+    },
+  });
+
+  const [modalAbierto, setModalAbierto] = useState(false);
+  const [productoSeleccionado, setProductoSeleccionado] = useState<Inventario | null>(null);
+  const [detallesProductos, setDetallesProductos] = useState<
+    Record<string, { descripcion: string; categoria: string }>
+  >({});
+
+  useEffect(() => {
     if (casaId.trim() !== '') {
-      listarInventario({ variables: { casaId } });
+      listarInventario({ variables: { casaId } }).then((res) => {
+        const inventario = res.data?.listarInventario || [];
+
+        inventario.forEach((item) => {
+          const id = item.productoId;
+          if (!detallesProductos[id]) {
+            obtenerProducto({ variables: { id } });
+          }
+        });
+      });
     }
+  }, [casaId]);
+
+  const abrirModal = (item: Inventario) => {
+    setProductoSeleccionado(item);
+    setModalAbierto(true);
+  };
+
+  const cerrarModal = () => {
+    setModalAbierto(false);
+    setProductoSeleccionado(null);
+  };
+
+  const onActualizado = () => {
+    refetch?.();
   };
 
   return (
     <Box>
-      {/* Filtro por ID de casa */}
-      <Stack direction="row" spacing={2} mb={3} alignItems="center">
-        <TextField
-          label="ID de la Casa"
-          variant="outlined"
-          size="small"
-          value={casaId}
-          onChange={(e) => setCasaId(e.target.value)}
-          sx={{
-            backgroundColor: '#e9ecef',
-            input: { color: 'black' },
-            label: { color: 'black' },
-            '& .MuiOutlinedInput-root': {
-              '& fieldset': { borderColor: '#ced4da' },
-              '&:hover fieldset': { borderColor: '#6c757d' },
-              '&.Mui-focused fieldset': { borderColor: '#495057' },
-            },
-            width: '300px',
-          }}
-        />
-        <Button variant="contained" onClick={handleBuscarInventario}>
-          Buscar Inventario
-        </Button>
-      </Stack>
-
-      {/* Estado de carga y errores */}
-      {loading && <Box textAlign="center"><CircularProgress /></Box>}
+      {loading && (
+        <Box textAlign="center" mt={3}>
+          <CircularProgress />
+        </Box>
+      )}
       {error && <Typography color="error">Error al cargar inventario.</Typography>}
 
-      {/* Inventario */}
-      <Grid container spacing={2}>
-        {data?.listarInventario.map((item) => (
-          <Grid key={item.productoId}>
-            <Card
-              sx={{
-                height: 160,
-                width: 240,
-                display: 'flex',
-                flexDirection: 'column',
-                borderRadius: 2,
-                boxShadow: 3,
-              }}
-            >
-              <CardContent sx={{ flexGrow: 1 }}>
-                <Typography variant="h6" gutterBottom>{item.nombreProducto}</Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Producto ID: {item.productoId}
-                </Typography>
-                <Typography variant="body2" color="text.secondary" mt={1}>
-                  Stock: {item.cantidadStock}
-                </Typography>
-              </CardContent>
-              {onItemSeleccionado && (
+      <Grid container spacing={2} mt={2}>
+        {data?.listarInventario.map((item) => {
+          const detalles = detallesProductos[item.productoId];
+          const borderColor = detalles ? getBorderColor(detalles.categoria) : 'gray';
+
+          return (
+            <Grid key={item.id}>
+              <Card
+                sx={{
+                  width: 200,
+                  height: 170,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  borderLeft: `8px solid ${borderColor}`,
+                  borderRadius: 2,
+                  boxShadow: 3,
+                }}
+              >
+                <CardContent sx={{ flexGrow: 1, overflow: 'hidden' }}>
+                  <Typography variant="h6" gutterBottom>
+                    {item.nombreProducto}
+                  </Typography>
+                  {detalles && (
+                    <>
+                      <Typography variant="body2" color="text.secondary">
+                        Categoría: {detalles.categoria}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {detalles.descripcion}
+                      </Typography>
+                    </>
+                  )}
+                  <Typography variant="body2" color="text.secondary">
+                    Stock: {item.cantidadStock}
+                  </Typography>
+                </CardContent>
                 <CardActions>
                   <Button
                     size="small"
                     variant="text"
-                    color="primary"
-                    onClick={() => onItemSeleccionado(item)}
+                    color="warning"
+                    onClick={() => abrirModal(item)}
                   >
-                    Seleccionar
+                    Modificar
                   </Button>
                 </CardActions>
-              )}
-            </Card>
-          </Grid>
-        ))}
+              </Card>
+            </Grid>
+          );
+        })}
       </Grid>
+
+      <ActualizarCantidadModal
+        abierto={modalAbierto}
+        onCerrar={cerrarModal}
+        producto={productoSeleccionado}
+        onActualizado={onActualizado}
+      />
     </Box>
   );
 };

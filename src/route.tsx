@@ -24,7 +24,7 @@ export const AppRouter: React.FC = () => {
       <Route path="/login" element={<LoginPage/>}/>
       <Route path="/" element={<RouterLayout/>}>
         <Route path="/recetas" element={<HomePage/>} />
-        <Route path="/registrarCompra" element={<InventoryPage/>} />
+        <Route path="/inventario" element={<InventoryPage/>} />
         {/* Rutas ADMIN */}
         {/* <Route path="/admin-solicitudes" element={<AdminPage/>} />
         <Route path="/admin-dashboard" element={<AdminDashboard/>} />

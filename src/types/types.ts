@@ -46,6 +46,7 @@ export interface CompraCreacionInput {
 
 // ------------------- INVENTARIO
 export interface Inventario {
+  id: string;
   casaId: string;
   productoId: string;
   nombreProducto: string;

@@ -18,10 +18,10 @@ const SideBar: React.FC = () => {
             <Button variant="text" color="inherit" sx={{ mt: 2 }} fullWidth onClick={() => navigate('/home')}>
                 Mis Casas
             </Button>
-            <Button variant="text" color="inherit" sx={{ mt: 2 }} fullWidth onClick={() => navigate('/registrarCompra')}>
+            <Button variant="text" color="inherit" sx={{ mt: 2 }} fullWidth onClick={() => navigate('/inventario')}>
                 Inventario
             </Button>
-            <Button variant="text" color="inherit" sx={{ mt: 2 }} fullWidth onClick={() => navigate('/productos')}>
+            <Button variant="text" color="inherit" sx={{ mt: 2 }} fullWidth onClick={() => navigate('/gastos')}>
                 Gastos
             </Button>
             <Button variant="text" color="inherit" sx={{ mt: 2 }} fullWidth onClick={() => navigate('/recetas')}>

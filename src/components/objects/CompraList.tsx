@@ -18,14 +18,21 @@ import { Compra } from '../../types/types';
 
 interface ComprasListProps {
   casaId: string;
+  refreshKey?: number;
 }
 
 type Order = 'asc' | 'desc';
 
-const ComprasList: React.FC<ComprasListProps> = ({ casaId }) => {
+const ComprasList: React.FC<ComprasListProps> = ({ casaId, refreshKey }) => {
   const { loading, error, data, refetch } = useQuery<{ listarCompras: Compra[] }>(LISTAR_COMPRAS, {
     variables: { casaId },
   });
+
+  React.useEffect(() => {
+    if (refreshKey !== undefined) {
+      refetch();
+    }
+  }, [refreshKey, refetch]);
 
   const [eliminarCompra] = useMutation(ELIMINAR_COMPRA);
 
@@ -62,7 +69,7 @@ const ComprasList: React.FC<ComprasListProps> = ({ casaId }) => {
 
   return (
     <Box sx={{ padding: 2 }}>
-      <Typography variant="h5" gutterBottom>
+      <Typography variant="h5" gutterBottom color='black'>
         Lista de Compras
       </Typography>
 

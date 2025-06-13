@@ -24,7 +24,11 @@ interface ProductoEnCarrito extends Producto {
   propietarioId: string | null;
 }
 
-const RegistrarCompra = () => {
+interface RegistrarCompraProps {
+  casaId: string;  // Recibimos casaId desde el padre
+}
+
+const RegistrarCompra: React.FC<RegistrarCompraProps> = ({ casaId }) => {
   const [carrito, setCarrito] = useState<ProductoEnCarrito[]>([]);
 
   const [crearCompra, { loading, error }] = useMutation(CREAR_COMPRA);
@@ -65,7 +69,7 @@ const RegistrarCompra = () => {
 
   const handleRegistrarCompra = () => {
     const input = {
-      casaId: 'idDeLaCasa', // TODO: reemplazar con valor real
+      casaId, // Usamos la prop aquí
       items: carrito.map(p => ({
         productoId: p.id,
         nombreProducto: p.nombre,

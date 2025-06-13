@@ -70,6 +70,7 @@ export const LISTAR_COMPRAS = gql`
 export const ACTUALIZAR_INVENTARIO = gql`
   mutation ActualizarInventario($id: String!, $cantidad: Float!) {
     actualizarInventario(id: $id, cantidad: $cantidad) {
+      id
       casaId
       productoId
       nombreProducto
@@ -81,6 +82,7 @@ export const ACTUALIZAR_INVENTARIO = gql`
 export const LISTAR_INVENTARIO = gql`
   query ListarInventario($casaId: String!) {
     listarInventario(casaId: $casaId) {
+      id
       casaId
       productoId
       nombreProducto
