@@ -1,6 +1,6 @@
 import { Typography, Paper } from '@mui/material';
 import React from 'react';
-import ChatIA from '../components/ChatIA';
+import ChatIA from '../components/objects/ChatIA';
 
 const HomePage: React.FC = () => {
   return (

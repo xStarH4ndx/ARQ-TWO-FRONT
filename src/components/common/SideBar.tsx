@@ -15,17 +15,17 @@ const SideBar: React.FC = () => {
           }}>
             PANEL DE CONTROL
             <Divider sx={{mt:1}}/>
-            <Button variant="text" color="inherit" sx={{ mt: 2 }} fullWidth>
-                Usuarios
+            <Button variant="text" color="inherit" sx={{ mt: 2 }} fullWidth onClick={() => navigate('/home')}>
+                Mis Casas
             </Button>
-            <Button variant="text" color="inherit" sx={{ mt: 2 }} fullWidth>
-                Despensa
+            <Button variant="text" color="inherit" sx={{ mt: 2 }} fullWidth onClick={() => navigate('/registrarCompra')}>
+                Inventario
             </Button>
-            <Button variant="text" color="inherit" sx={{ mt: 2 }} fullWidth>
-                Útiles de Aseo
+            <Button variant="text" color="inherit" sx={{ mt: 2 }} fullWidth onClick={() => navigate('/productos')}>
+                Gastos
             </Button>
-            <Button variant="text" color="inherit" sx={{ mt: 2 }} fullWidth>
-                Finanzas
+            <Button variant="text" color="inherit" sx={{ mt: 2 }} fullWidth onClick={() => navigate('/recetas')}>
+                Recetas
             </Button>
         </Paper>
     )

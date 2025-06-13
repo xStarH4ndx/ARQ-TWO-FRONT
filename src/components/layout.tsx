@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Typography, Paper, useTheme, Container } from '@mui/material'
+import { Box, Typography, Container } from '@mui/material'
 import Navbar from './common/Navbar'
 import SideBar from './common/SideBar'
 
@@ -8,7 +8,6 @@ interface Props {
 }
 
 const Layout: React.FC<Props> = ({children}) => {
-  const theme = useTheme()
 
   return (
     <Box sx={{ height: '100vh', display: 'grid', gridTemplateRows: 'auto 1fr auto', overflow: 'hidden' }}>
