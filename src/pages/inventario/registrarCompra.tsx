@@ -21,6 +21,7 @@ import { CREAR_COMPRA } from '../../api/queries/inventoryQueries';
 interface ProductoEnCarrito extends Producto {
   cantidad: number;
   esCompartido: boolean;
+  precioUnitario: number; // Asumimos que el precio unitario es un número
   propietarioId: string | null;
 }
 
@@ -43,7 +44,7 @@ const RegistrarCompra: React.FC<RegistrarCompraProps> = ({ casaId }) => {
       }
       return [
         ...prev,
-        { ...producto, cantidad: 1, esCompartido: false, propietarioId: null }
+        { ...producto, cantidad: 1, esCompartido: false, precioUnitario: 0,propietarioId: null }
       ];
     });
   };
@@ -52,6 +53,13 @@ const RegistrarCompra: React.FC<RegistrarCompraProps> = ({ casaId }) => {
     if (cantidad < 1) return;
     setCarrito((prev) =>
       prev.map((p) => (p.id === id ? { ...p, cantidad } : p))
+    );
+  };
+
+  const cambiarPrecioUnitario = (id: string, precioUnitario: number) => {
+    if( precioUnitario < 0) return;
+    setCarrito((prev) =>
+      prev.map((p) => (p.id === id ? { ...p, precioUnitario } : p))
     );
   };
 
@@ -74,9 +82,10 @@ const RegistrarCompra: React.FC<RegistrarCompraProps> = ({ casaId }) => {
         productoId: p.id,
         nombreProducto: p.nombre,
         cantidad: p.cantidad,
-        precioUnitario: 0, // o el valor real si lo tienes
+        precioUnitario: p.precioUnitario,
         esCompartido: p.esCompartido,
-        propietarioId: p.propietarioId,
+        propietarioId: p.esCompartido ? null : '111111',
+        // propietarioId: p.esCompartido ? null : localStorage.getItem('userId'),
       })),
     };
 
@@ -117,6 +126,7 @@ const RegistrarCompra: React.FC<RegistrarCompraProps> = ({ casaId }) => {
                   <TableCell>Categoría</TableCell>
                   <TableCell>Cantidad</TableCell>
                   <TableCell>Compartido</TableCell>
+                  <TableCell>Precio Unitario</TableCell>
                   <TableCell>Acciones</TableCell>
                 </TableRow>
               </TableHead>
@@ -139,6 +149,16 @@ const RegistrarCompra: React.FC<RegistrarCompraProps> = ({ casaId }) => {
                       <Checkbox
                         checked={producto.esCompartido}
                         onChange={(e) => cambiarEsCompartido(producto.id, e.target.checked)}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <TextField
+                        type="number"
+                        size="small"
+                        value={producto.precioUnitario}
+                        onChange={(e) => cambiarPrecioUnitario(producto.id, Number(e.target.value))}
+                        inputProps={{ min: 1 }}
+                        sx={{ width: 80 }}
                       />
                     </TableCell>
                     <TableCell>

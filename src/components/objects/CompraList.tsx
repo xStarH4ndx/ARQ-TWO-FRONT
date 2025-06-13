@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { LISTAR_COMPRAS, ELIMINAR_COMPRA } from '../../api/queries/inventoryQueries';
 import {
@@ -28,14 +28,13 @@ const ComprasList: React.FC<ComprasListProps> = ({ casaId, refreshKey }) => {
     variables: { casaId },
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (refreshKey !== undefined) {
       refetch();
     }
   }, [refreshKey, refetch]);
 
   const [eliminarCompra] = useMutation(ELIMINAR_COMPRA);
-
   const [order, setOrder] = useState<Order>('desc');
 
   const handleSortRequest = () => {
@@ -50,9 +49,11 @@ const ComprasList: React.FC<ComprasListProps> = ({ casaId, refreshKey }) => {
       await eliminarCompra({
         variables: { id },
       });
-      refetch(); // Actualiza la lista de compras después de eliminar
+      window.alert('Compra eliminada con éxito');
+      refetch();
     } catch (err) {
       console.error('Error al eliminar la compra:', err);
+      window.alert('Ocurrió un error al eliminar la compra');
     }
   };
 
@@ -69,7 +70,7 @@ const ComprasList: React.FC<ComprasListProps> = ({ casaId, refreshKey }) => {
 
   return (
     <Box sx={{ padding: 2 }}>
-      <Typography variant="h5" gutterBottom color='black'>
+      <Typography variant="h5" gutterBottom color="black">
         Lista de Compras
       </Typography>
 
@@ -124,7 +125,7 @@ const ComprasList: React.FC<ComprasListProps> = ({ casaId, refreshKey }) => {
           </Table>
         </Paper>
       ) : (
-        <Typography variant="body1">No hay compras registradas aún.</Typography>
+        <Typography variant="body1" color='black'>No hay compras registradas aún.</Typography>
       )}
     </Box>
   );
