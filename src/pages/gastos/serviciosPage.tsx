@@ -46,17 +46,33 @@ const ServiciosContratados: React.FC<Props> = ({ casaId }) => {
       setDescripcion('');
       setValorTotal('');
       setFechaRenovacion('');
+      window.alert('Servicio creado exitosamente.');
     },
+    onError: (error) => {
+      console.error(error);
+      window.alert('Error al crear el servicio.');
+    }
   });
 
   const handleCrear = () => {
-    if (!descripcion || !valorTotal || !fechaRenovacion) return;
+    if (!descripcion.trim() || !valorTotal.trim() || !fechaRenovacion.trim()) {
+      window.alert('Por favor, completa todos los campos requeridos.');
+      return;
+    }
+
+    const valor = parseFloat(valorTotal);
+    if (isNaN(valor) || valor <= 0) {
+      window.alert('El valor total debe ser un número válido mayor que 0.');
+      return;
+    }
+
     const input: CrearGastoServicioDTO = {
       casaId,
       descripcion,
-      valorTotal: parseFloat(valorTotal),
+      valorTotal: valor,
       fechaRenovacion: new Date(fechaRenovacion).toISOString(),
     };
+
     crearGastoServicio({ variables: { input } });
   };
 
@@ -85,6 +101,7 @@ const ServiciosContratados: React.FC<Props> = ({ casaId }) => {
             value={descripcion}
             onChange={(e) => setDescripcion(e.target.value)}
             InputLabelProps={{ style: { color: 'black' } }}
+            inputProps={{ style: { color: 'black' } }}
             sx={{ backgroundColor: '#e0e0e0', borderRadius: 1 }}
           />
         </Grid>
@@ -98,6 +115,7 @@ const ServiciosContratados: React.FC<Props> = ({ casaId }) => {
             value={valorTotal}
             onChange={(e) => setValorTotal(e.target.value)}
             InputLabelProps={{ style: { color: 'black' } }}
+            inputProps={{ style: { color: 'black' } }}
             sx={{ backgroundColor: '#e0e0e0', borderRadius: 1 }}
           />
         </Grid>
@@ -109,6 +127,7 @@ const ServiciosContratados: React.FC<Props> = ({ casaId }) => {
             label="Fecha Renovación"
             type="date"
             InputLabelProps={{ shrink: true, style: { color: 'black' } }}
+            inputProps={{ style: { color: 'black' } }}
             value={fechaRenovacion}
             onChange={(e) => setFechaRenovacion(e.target.value)}
             sx={{ backgroundColor: '#e0e0e0', borderRadius: 1 }}
