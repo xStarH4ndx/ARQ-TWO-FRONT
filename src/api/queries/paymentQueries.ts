@@ -3,9 +3,9 @@ import { gql } from "@apollo/client";
 export const LISTAR_GASTO_SERVICIO = gql`
   query ListarGastoServicio($casaId: String!) {
     listarGastoServicio(casaId: $casaId) {
-      casaId
       descripcion
       valorTotal
+      fechaRegistro
       fechaRenovacion
     }
   }
@@ -16,6 +16,7 @@ export const LISTAR_GASTO_COMPRA = gql`
     listarGastoCompra(casaId: $casaId) {
       id
       compraId
+      descripcion
       itemsCompra {
         productoId
         nombreProducto

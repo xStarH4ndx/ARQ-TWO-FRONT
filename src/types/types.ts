@@ -58,6 +58,7 @@ export interface GastoServicio {
   casaId: string;
   descripcion: string;
   valorTotal: number;
+  fechaRegistro: string;
   fechaRenovacion: string; // ISO 8601
 }
 
@@ -72,6 +73,8 @@ export interface CrearGastoServicioDTO {
 export interface GastoCompra {
   id: string;
   compraId: string;
+  descripcion: string;
+  fechaRegistro: string;
   itemsCompra: ItemCompra[];
   valorTotalCompartido: number;
   valorTotalIndividual: number;

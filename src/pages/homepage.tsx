@@ -6,10 +6,10 @@ const HomePage: React.FC = () => {
   return (
     <Paper sx={{p: 4 ,backgroundColor: "#F4F5F7"}}>
         <Typography variant="h4" component="h1" gutterBottom color="black">
-            Página de Inicio
+            Recetas Online
         </Typography>
         <Typography variant="body1" gutterBottom color="black">
-            Bienvenido a la página de inicio de nuestra aplicación. Aquí puedes encontrar información relevante y enlaces a otras secciones.
+            Bienvenido a  Recetas Online, tu asistente personal para descubrir y compartir recetas de cocina. Aquí puedes interactuar con nuestra IA para encontrar recetas deliciosas y consejos culinarios.
         </Typography>
         <Paper sx={{p :2}}>
           <ChatIA />
