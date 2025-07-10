@@ -21,7 +21,7 @@ const Navbar = () => {
           >
             Bienvenido, Usuario
           </Typography>
-          <Button
+          {/* <Button
             color="inherit"
             variant="text"
             sx={{ marginRight: 1.2 }}
@@ -35,7 +35,7 @@ const Navbar = () => {
             onClick={handleLogout}
           >
             Cerrar sesión
-          </Button>
+          </Button> */}
         </Toolbar>
       </AppBar>
     </Box>

@@ -15,9 +15,9 @@ const SideBar: React.FC = () => {
           }}>
             PANEL DE CONTROL
             <Divider sx={{mt:1}}/>
-            <Button variant="text" color="inherit" sx={{ mt: 2 }} fullWidth onClick={() => navigate('/home')}>
+            {/* <Button variant="text" color="inherit" sx={{ mt: 2 }} fullWidth onClick={() => navigate('/home')}>
                 Mis Casas
-            </Button>
+            </Button> */}
             <Button variant="text" color="inherit" sx={{ mt: 2 }} fullWidth onClick={() => navigate('/inventario')}>
                 Inventario
             </Button>
