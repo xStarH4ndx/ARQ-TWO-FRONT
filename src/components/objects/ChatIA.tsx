@@ -55,11 +55,12 @@ const ChatIA: React.FC<ChatIAProps> = ({ casaId }) => {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${API_KEY}`,
+          'HTTP-Referer': 'https://arq-two-front-git-main-xstarh4ndxs-projects.vercel.app',
           'X-Title': 'Chat Recetas IA',
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'meta-llama/llama-4-maverick:free',
+          model: 'google/gemma-3-4b-it:free',
           messages: newMessages.map((msg) => ({
             role: msg.role,
             content: msg.content,
