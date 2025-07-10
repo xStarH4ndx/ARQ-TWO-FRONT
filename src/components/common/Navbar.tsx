@@ -1,14 +1,14 @@
-import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import { useUserStore } from '../../store/UserStore';
+import { AppBar, Toolbar, Typography, Box } from '@mui/material';
+// import { useNavigate } from 'react-router-dom';
+// import { useUserStore } from '../../store/UserStore';
 
 const Navbar = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const handleLogout = () => {
-    useUserStore.getState().logout();
-    navigate('/login');
-  };
+  // const handleLogout = () => {
+  //   useUserStore.getState().logout();
+  //   navigate('/login');
+  // };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
