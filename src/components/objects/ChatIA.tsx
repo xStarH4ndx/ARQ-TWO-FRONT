@@ -55,7 +55,7 @@ const ChatIA: React.FC<ChatIAProps> = ({ casaId }) => {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${API_KEY}`,
-          'HTTP-Referer': 'http://localhost:5173',
+          'HTTP-Referer': 'https://arq-two-front-git-main-xstarh4ndxs-projects.vercel.app',
           'X-Title': 'Chat Recetas IA',
           'Content-Type': 'application/json',
         },
