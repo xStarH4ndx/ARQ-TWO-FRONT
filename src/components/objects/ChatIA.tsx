@@ -60,7 +60,7 @@ const ChatIA: React.FC<ChatIAProps> = ({ casaId }) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'nvidia/llama-3.3-nemotron-super-49b-v1:free',
+          model: 'google/gemma-3n-e2b-it:free',
           messages: newMessages.map((msg) => ({
             role: msg.role,
             content: msg.content,
