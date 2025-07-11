@@ -34,6 +34,7 @@ const getBorderColor = (categoria: string) => {
 
 const InventarioList: React.FC<InventarioListProps> = ({ casaId, onItemSeleccionado }) => {
   const client = useApolloClient();
+  console.debug(onItemSeleccionado);
 
   const [listarInventario] = useLazyQuery<{ listarInventario: Inventario[] }>(LISTAR_INVENTARIO, {
     fetchPolicy: 'no-cache',

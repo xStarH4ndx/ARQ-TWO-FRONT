@@ -23,8 +23,8 @@ interface ProductoCardProps {
 const ProductoCard: React.FC<ProductoCardProps> = ({ producto, onSeleccionar }) => (
   <Card
     sx={{
-      height: 170,
-      width: 200,
+      height: 210,
+      width: 243,
       display: 'flex',
       flexDirection: 'column',
       borderLeft: `8px solid ${getBorderColor(producto.categoria)}`,
