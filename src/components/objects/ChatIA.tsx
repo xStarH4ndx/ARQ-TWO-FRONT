@@ -65,12 +65,51 @@ const ChatIA: React.FC<ChatIAProps> = ({ casaId }) => {
             role: msg.role,
             content: msg.content,
           })),
+          stream: true,
         }),
       });
 
-      const data = await response.json();
-      const reply = data.choices?.[0]?.message?.content || 'Sin respuesta de la IA.';
-      setMessages([...newMessages, { role: 'assistant', content: reply }]);
+      if (!response.body) {
+        throw new Error('No se pudo obtener el cuerpo de la respuesta');
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder('utf-8');
+      let assistantReply = '';
+
+      setMessages((prev) => [...prev, { role: 'assistant', content: '' }]);
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        const lines = chunk
+          .split('\n')
+          .map((line) => line.trim())
+          .filter((line) => line !== '' && line !== 'data: [DONE]');
+
+        for (const line of lines) {
+          const jsonStr = line.replace(/^data:\s*/, '');
+          try {
+            const parsed = JSON.parse(jsonStr);
+            const delta = parsed.choices?.[0]?.delta?.content;
+            if (delta) {
+              assistantReply += delta;
+              setMessages((prev) => {
+                const updated = [...prev];
+                const last = updated[updated.length - 1];
+                if (last.role === 'assistant') {
+                  last.content = assistantReply;
+                }
+                return updated;
+              });
+            }
+          } catch (err) {
+            console.warn('Error al parsear línea del stream:', line);
+          }
+        }
+      }
     } catch (error) {
       console.error('Error al enviar mensaje:', error);
     } finally {
